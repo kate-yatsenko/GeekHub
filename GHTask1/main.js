@@ -1,10 +1,10 @@
 var n = 1000;
 
-var ifFuncCode = '';
-var switchFuncCode = 'switch (y){';
-for (var x = 0; x < n; x++) {
-    ifFuncCode += `if(y == ${x}){}`;
-    switchFuncCode += `case ${x} :break;`;
+var ifFuncCode = 'if(y == 0){}';
+var switchFuncCode = 'switch (y){case 0:break;';
+for (var x = 1; x < n; x++) {
+    ifFuncCode += `else if(y == ${x}){}`;
+    switchFuncCode += `case ${x}:break;`;
 }
 switchFuncCode += '}';
 
