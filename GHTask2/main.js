@@ -30,7 +30,7 @@ function stringCheck(str) {
 
 var result = stringCheck(string);
 if (result.length == 0) {
-    console.log('Code is correct!');
+    alert('Code is correct!');
 } else {
     alert('Don\'t close: ' + result);
 }
