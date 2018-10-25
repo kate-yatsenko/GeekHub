@@ -18,11 +18,10 @@ function stringCheck(str) {
                 el.pop();
             }
         }
-        if (el[el.length - 1] == "'" && el[el.length - 2] == "'" || el[el.length - 1] == "`" && el[el.length - 2] == "`" || el[el.length - 1] == "\"" && el[el.length - 2] == "\"") {
-            el.splice([el.length - 2]);
-        }
-        if (el[el.length - 3] == "'" && el[el.length - 1] == "'" || el[el.length - 3] == "`" && el[el.length - 1] == "`" || el[el.length - 3] == "\"" && el[el.length - 1] == "\"") {
-            el.splice([el.length - 3]);
+        for(var j=0;j<=el.length - 2;j++){
+            if (el[el.length - 1] == "'" && el[j] == "'" || el[el.length - 1] == "`" && el[j] == "`" || el[el.length - 1] == "\"" && el[j] == "\""){
+                el.splice([j]);
+            }
         }
     }
     return el;
@@ -32,5 +31,5 @@ var result = stringCheck(string);
 if (result.length == 0) {
     alert('Code is correct!');
 } else {
-    alert('Don\'t close: ' + result);
+    alert('Don\'t close: ' + result.reverse());
 }
