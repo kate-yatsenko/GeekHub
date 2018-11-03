@@ -104,7 +104,6 @@
         User.users.push(this);
         this.id = User.users.length - 1;
         this.name = name;
-        this.unreadMessages = [];
 
         this.chooseDefaultChat = function (defaultInstansChat) {
             this.defaultInstansChat = defaultInstansChat;
@@ -139,7 +138,7 @@
                     continue;
                 }
                 console.log('[' + chat.messages[i].user.name + ']' + '{connect: ' + chat.checkConnect(chat.messages[i].user) + '} [' + chat.messages[i].timeLog() + '] message: ' + chat.messages[i].message);
-                chatInstansName.messages[i].readMessage(this);
+                chat.messages[i].readMessage(this);
             }
         }
     }
