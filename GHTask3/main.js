@@ -1,6 +1,6 @@
 'use strict'
 
-;(function() {
+;(function () {
 
     checkGlobalScope('ChatHistory', ChatHistory);
     checkGlobalScope('Message', Message);
@@ -10,37 +10,54 @@
     ChatHistory.chats = [];
 
     function ChatHistory(name) {
-        if (!name) throw new Error("Don't input name of chat");
+        if (!name) throw new Error("You have not entered a chat name");
 
         this.chatName = name;
         this.messages = [];
         this.usersWhoConnect = [];
+
+        ChatHistory.checkName = function (name) {
+            for (var i = 0; i < ChatHistory.chats.length; i++) {
+                if (ChatHistory.chats[i].chatName == name) {
+                    throw new Error('Name ' + name + ' already used');
+                }
+            }
+        };
+        ChatHistory.checkName(this.chatName);
+
         ChatHistory.chats.push(this);
 
         ChatHistory.returnChats = function () {
             return ChatHistory.chats;
-        }
+        };
 
-        this.addUser = function (userInstans) {
-            this.usersWhoConnect.push(userInstans);
-        }
+        this.addUser = function () {
+            for (var i = 0; i < arguments.length; i++) {
+                var userInstans = arguments[i];
+                this.usersWhoConnect.push(userInstans);
+            }
 
-        this.deleteUser = function (userInstans) {
-            for (var i = 0; i < this.usersWhoConnect.length; i++) {
-                if (this.usersWhoConnect[i] == userInstans) {
-                    this.usersWhoConnect.splice(i, 1);
+        };
+
+        this.deleteUser = function () {
+            for (var j = 0; j < arguments.length; j++) {
+                var userInstans = arguments[j];
+                for (var i = 0; i < this.usersWhoConnect.length; i++) {
+                    if (this.usersWhoConnect[i] == userInstans) {
+                        this.usersWhoConnect.splice(i, 1);
+                    }
                 }
             }
-        }
+
+        };
 
         this.checkConnect = function (userInstans) {
             for (var i = 0; i < this.usersWhoConnect.length; i++) {
                 if (this.usersWhoConnect[i] == userInstans) {
-                    return true;
+                    return 'true';
                 }
-
             }
-        }
+        };
 
         this.sendMessage = function (userInstans, message) {
             if (this.checkConnect(userInstans)) {
@@ -49,15 +66,23 @@
                 return message;
             }
             throw new Error('Don\'t connect');
-        }
+        };
 
-        this.showHistory = function (index, count) {
-            var indexMessage = index || 0;
-            var countMessage = (indexMessage + count) || 10;
+        this.showHistory = function (count, index) {
+            if(arguments.length == 2){
+                var indexMessage = index;
+                var countMessage = indexMessage + count;
+            } else if(arguments.length == 1){
+                var indexMessage = 0;
+                var countMessage = indexMessage + count;
+            } else if(arguments.length == 0){
+                var indexMessage =  0;
+                var countMessage =  10;
+            }
             for (var i = indexMessage; i < countMessage; i++) {
                 console.log('[' + this.messages[i].user.name + ']' + '{connect: ' + this.checkConnect(this.messages[i].user) + '} [' + this.messages[i].timeLog() + '] message: ' + this.messages[i].message);
             }
-        }
+        };
 
         this.showUsersUnreadMessage = function (userInstans, count) {
             var countMessages = (this.messages.length - count) || 0;
@@ -84,7 +109,7 @@
 
         this.readMessage = function (userInstansRead) {
             this.whoRead[userInstansRead.id] = true;
-        }
+        };
 
         this.timeLog = function () {
             var time = this.time;
@@ -107,31 +132,31 @@
 
         this.chooseDefaultChat = function (defaultInstansChat) {
             this.defaultInstansChat = defaultInstansChat;
-        }
+        };
 
         this.chooseChat = function (newInstansChat) {
-            var chat = newInstansChat || this.defaultInstansChatName;
-            if (!newInstansChat && !this.defaultInstansChatName) throw new Error('Don\'t choose chat');
+            var chat = newInstansChat || this.defaultInstansChat;
+            if (!newInstansChat && !this.defaultInstansChat) throw new Error('Don\'t choose chat');
             chat.addUser(this);
-        }
+        };
 
         this.deleteChat = function (deleteInstansChat) {
-            var chat = deleteInstansChat || this.defaultInstansChatName;
-            if (!deleteInstansChat && !this.defaultInstansChatName) throw new Error('Don\'t choose chat');
+            var chat = deleteInstansChat || this.defaultInstansChat;
+            if (!deleteInstansChat && !this.defaultInstansChat) throw new Error('Don\'t choose chat');
             chat.deleteUser(this);
-        }
+        };
 
-        this.addMessage = function (chatInsansName, message) {
-            var chat = chatInsansName || this.defaultInstansChatName;
-            if (!chatInstansName && !this.defaultInstansChatName) throw new Error('Don\'t choose chat');
+        this.addMessage = function (message, chatInstans) {
+            var chat = chatInstans || this.defaultInstansChat;
+            if (!chatInstans && !this.defaultInstansChat) throw new Error('Don\'t choose chat');
             chat.sendMessage(this, message);
-        }
+        };
 
-        this.showUnreadMessage = function (chatInstansName, count) {
-            var chat = chatInstansName || this.defaultInstansChat;
+        this.showUnreadMessage = function (chatInstans, count) {
+            var chat = chatInstans || this.defaultInstansChat;
             var countMessages = (chat.messages.length - count) || (chat.messages.length - 10);
 
-            if (!chatInstansName && !this.defaultInstansChat) throw new Error('Don\'t choose chat');
+            if (!chatInstans && !this.defaultInstansChat) throw new Error('Don\'t choose chat');
             for (var i = chat.messages.length - 1; i >= countMessages; i--) {
                 if (chat.messages[i].whoRead[this.id]) {
                     countMessages--;
@@ -156,15 +181,13 @@
 })();
 
 
-function test(){
+function test() {
     var chat1 = new ChatHistory('chat1');
     var chat2 = new ChatHistory('chat2');
     var user1 = new User('kate');
     var user2 = new User('pasha');
     var user3 = new User('lena');
-    chat1.addUser(user1);
-    chat1.addUser(user2);
-    chat1.addUser(user3);
+    chat1.addUser(user1, user2, user3);
     chat1.sendMessage(user1, 'hello');
     chat1.sendMessage(user1, 'how are you?');
     chat1.sendMessage(user2, 'Fine');
@@ -194,4 +217,29 @@ function test(){
     user3.showUnreadMessage(chat1, 1);
     console.log('----------------------------');
     chat1.showHistory();
+    chat1.deleteUser(user2, user3);
+    console.log(chat1.usersWhoConnect);
+    chat1.showHistory();
+    user1.chooseDefaultChat(chat2);
+    user1.chooseChat();
+    user2.chooseChat(chat2);
+    console.log('----------------------------');
+    console.log(chat2.usersWhoConnect);
+    user1.addMessage('Privet');
+    user1.addMessage('Privet3');
+    user1.addMessage('Privet4');
+    user1.addMessage('Privet5');
+    user1.addMessage('Privet6');
+    user2.addMessage('Privet7', chat2);
+    user2.addMessage('Privet8', chat2);
+    user2.addMessage('Privet9', chat2);
+    user2.addMessage('Privet10', chat2);
+    user2.addMessage('Privet11', chat2);
+    user2.addMessage('Privet12', chat2);
+    chat2.showHistory();
+    chat2.deleteUser(user2);
+    user1.deleteChat(chat2);
+    console.log('----------------------------');
+    chat2.showHistory(4,2);
+
 }
