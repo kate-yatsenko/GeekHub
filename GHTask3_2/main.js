@@ -116,8 +116,7 @@
             var hours = time.getHours();
             var min = time.getMinutes();
             var sec = time.getSeconds();
-            var timeWithoutMs = new Date(time.getFullYear(), time.getMonth(), time.getDate(), hours, min, sec);
-            var ms = time - timeWithoutMs;
+            var ms = time.getMilliseconds();
             return hours + ':' + min + ':' + sec + '.' + ms;
         }
     }
