@@ -86,14 +86,11 @@
 
         this.showUsersUnreadMessage = function (userInstans, count) {
             var countMessages = (this.messages.length - count) || 0;
-            loop1:
                 for (var i = this.messages.length - 1; i >= countMessages; i--) {
-                    for (var j = this.messages[i].whoRead.length - 1; j >= 0; j--) {
-                        if (this.messages[i].whoRead[j] == userInstans) {
+                        if (this.messages[i].whoRead.indexOf(userInstans) != -1) {
                             if (count) countMessages--;
-                            continue loop1;
+                            continue;
                         }
-                    }
                     console.log('[' + this.messages[i].user.name + ']' + '{connect: ' + this.checkConnect(this.messages[i].user) + '} [' + this.messages[i].timeLog() + '] message: ' + this.messages[i].message);
                     this.messages[i].readMessage(userInstans);
 
@@ -159,14 +156,11 @@
             var countMessages = (chat.messages.length - count) || (chat.messages.length - 10);
 
             if (!chatInstans && !this.defaultInstansChat) throw new Error('Don\'t choose chat');
-            loop2:
                 for (var i = chat.messages.length - 1; i >= countMessages; i--) {
-                    for (var j = chat.messages[i].whoRead.length - 1; j >= 0; j--) {
-                        if (chat.messages[i].whoRead[j] == this) {
+                        if (chat.messages[i].whoRead.indexOf(this) != -1) {
                             countMessages--;
-                            continue loop2;
+                            continue;
                         }
-                    }
                     console.log('[' + chat.messages[i].user.name + ']' + '{connect: ' + chat.checkConnect(chat.messages[i].user) + '} [' + chat.messages[i].timeLog() + '] message: ' + chat.messages[i].message);
                     chat.messages[i].readMessage(this);
 
