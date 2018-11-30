@@ -1,0 +1,59 @@
+body{
+    background-image: url("../img/back-img.jpg");
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+
+p{
+    color: antiquewhite;
+    font-size: 20px;
+}
+
+h1{
+    text-align: center;
+}
+
+#change-size{
+    border: none;
+    border-radius: 3px;
+}
+
+#score{
+    text-align: center;
+    color: #D2B48C
+}
+#result {
+    text-align: center;
+    font-size: 40px;
+    color: #D2B48C;
+}
+
+.clear{
+    clear: both;
+}
+#size-bloc{
+    margin-left: -50px;
+    padding-left: 50%;
+}
+
+#size-title{
+    float: left;
+    margin-top: 0;
+    color: #D2B48C
+}
+
+#size{
+    width: 50px;
+    margin-left: 10px;
+    border-radius: 3px;
+}
+
+#canvas{
+    background-color: #FFDEAD;
+    border-radius: 5px;
+}
+
+#canvas-block{
+    margin-left: -250px;
+    padding-left: 50%;
+}
