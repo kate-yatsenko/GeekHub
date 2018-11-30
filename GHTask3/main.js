@@ -241,5 +241,4 @@ function test() {
     user1.deleteChat(chat2);
     console.log('----------------------------');
     chat2.showHistory(4,2);
-
 }
