@@ -16,8 +16,15 @@ const todoList = (state = [], action) => {
         }
         return {...item, completed: !item.completed};
       });
-      case 'REMOVE_TODO':
-        return state.filter(item => item.id !==action.id);
+    case 'REMOVE_TODO':
+      return state.filter(item => item.id !== action.id);
+    case 'EDIT_TODO':
+      return state.map(item => {
+        if (item.id !== action.id) {
+          return item
+        }
+        return {...item, text: action.text};
+      });
     default:
       return state
   }

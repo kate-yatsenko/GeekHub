@@ -1,10 +1,22 @@
 import React from "react";
 import {Form, Button} from "react-bootstrap";
-import {toggleTodo, removeTodo} from '../../../actions';
+import {toggleTodo, removeTodo, editTodo} from '../../../actions';
 import {connect} from 'react-redux';
+import EditModal from './EditModal';
 import './index.css';
 
 class Todo extends React.Component {
+  state = {
+    show: false,
+  };
+
+  closeModal = () => {
+    this.setState({ show: false });
+  }
+
+  showModal = () => {
+    this.setState({ show: true });
+  }
 
   completedTodo = (id) => {
     const {dispatch} = this.props;
@@ -16,8 +28,15 @@ class Todo extends React.Component {
     dispatch(removeTodo(id))
   };
 
+  editTodoItem = (id, text) => {
+    const {dispatch} = this.props;
+    dispatch(editTodo(id, text));
+    this.closeModal();
+  };
+
   render() {
     const {item} = this.props;
+    const {show} = this.state;
     return (
       <Form.Group className="todo-item d-flex justify-content-between">
         <Form.Check
@@ -25,12 +44,29 @@ class Todo extends React.Component {
           checked={item.completed}
           onChange={() => this.completedTodo(item.id)}
         />
-        <Button
-          variant="danger"
-          onClick={() => this.removeTodoItem(item.id)}
-        >
-          <span>Remove</span>
-        </Button>
+        <div>
+          <Button
+            variant="primary"
+            className="mr-1"
+            onClick={this.showModal}
+          >
+            <span>Edit</span>
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => this.removeTodoItem(item.id)}
+          >
+            <span>Remove</span>
+          </Button>
+        </div>
+        <EditModal
+          id={item.id}
+          text={item.text}
+          editTodoItem={this.editTodoItem}
+          closeModal={this.closeModal}
+          show={show}
+
+        />
       </Form.Group>
     )
   }
